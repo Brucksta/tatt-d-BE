@@ -18,6 +18,23 @@ db.once('open', async () => {
     password: 'password12345'
   });
 
+  await User.create({
+    firstName: 'Mat',
+    lastName: 'Schutlz',
+    email: 'mattschultz@gmail.com',
+    password: 'password12345'
+  });
+
+  await User.create({
+    firstName: 'Peter',
+    lastName: 'Bruckner',
+    email: 'admin@gmail.com',
+    password: 'password',
+    bio: 'hi my name is peter and i love tattoos',
+    social: 'peterbrcukner08@gmail.com'
+  });
+
+
   console.log('users seeded');
 
   process.exit();

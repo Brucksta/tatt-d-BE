@@ -6,6 +6,17 @@ const typeDefs = gql`
     firstName: String
     lastName: String
     email: String
+    bio: String
+    social: String
+    style: String
+    profilePicture: String
+  }
+  
+  type Works {
+    userId: Int
+    workurl: String
+    post: String
+    flash: String
   }
 
   type Auth {
@@ -15,6 +26,7 @@ const typeDefs = gql`
 
   type Query {
     user: User
+    works: Works
   }
 
   type Mutation {
