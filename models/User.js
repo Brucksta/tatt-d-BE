@@ -3,7 +3,13 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const bcrypt = require('bcrypt');
 
+
+
 const userSchema = new Schema({
+  isArtist: {
+    type: Boolean,
+    required: true,
+  },
   firstName: {
     type: String,
     required: true,
@@ -34,6 +40,9 @@ const userSchema = new Schema({
     type: String,
   },
   profilePicture: {
+    type: String,
+  },
+  myTattoos: {
     type: String,
   }
 });

@@ -32,6 +32,7 @@ db.once('open', async () => {
     password: 'password',
     bio: 'hi my name is peter and i love tattoos',
     social: 'peterbrcukner08@gmail.com'
+    
   });
 
 
