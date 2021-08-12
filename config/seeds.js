@@ -31,8 +31,10 @@ db.once('open', async () => {
     email: 'admin@gmail.com',
     password: 'password',
     bio: 'hi my name is peter and i love tattoos',
-    social: 'peterbrcukner08@gmail.com'
+    social: 'peterbrcukner08@gmail.com',
+    style: ["trad", "newschool", "japanese", "porn", "hub", "is", "great", "yeah"], 
     
+
   });
 
 

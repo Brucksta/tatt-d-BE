@@ -6,7 +6,7 @@ const workSchema = new Schema({
     userId: {
       type: Number,
     },
-    workurl: {
+    tattoos: {
       type: String,
     },
     post: {

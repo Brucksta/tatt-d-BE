@@ -1,7 +1,10 @@
-const { AuthenticationError } = require('apollo-server-express');
-const { GraphQLUpload } = require('graphql-upload');
-const { User } = require('../models');
-const { signToken } = require('../utils/auth');
+const { AuthenticationError } = require("apollo-server-express");
+const { GraphQLUpload } = require("graphql-upload");
+const { User } = require("../models");
+const { signToken } = require("../utils/auth");
+const fs = require("fs");
+const path = require("path");
+const { finished } = require("stream/promises");
 
 const resolvers = {
   Upload: GraphQLUpload,
@@ -9,11 +12,16 @@ const resolvers = {
   Query: {
     user: async (parent, args, context) => {
       if (context.user) {
-        const user = await User.findById(context.user._id)
+        const user = await User.findById(context.user._id);
         return user;
       }
 
-      throw new AuthenticationError('Not logged in');
+      throw new AuthenticationError("Not logged in");
+    },
+    findUsers: async (parent, { search }, context) => {
+      const searchRegex = new RegExp(search, 'i');
+      const users = await User.find( { $or: [{ firstName: searchRegex }, { lastName: searchRegex}] },);
+      return users;
     }
   },
   Mutation: {
@@ -25,45 +33,50 @@ const resolvers = {
     },
     updateUser: async (parent, args, context) => {
       if (context.user) {
-        return await User.findByIdAndUpdate(context.user._id, args, { new: true });
+        return await User.findByIdAndUpdate(context.user._id, args, {
+          new: true,
+        });
       }
 
-      throw new AuthenticationError('Not logged in');
+      throw new AuthenticationError("Not logged in");
     },
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw new AuthenticationError('Incorrect credentials');
+        throw new AuthenticationError("Incorrect credentials");
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw new AuthenticationError('Incorrect credentials');
+        throw new AuthenticationError("Incorrect credentials");
       }
 
       const token = signToken(user);
 
       return { token, user };
     },
-
-    singleUpload: async (parent, { file }) => {
+    singleUpload: async (parent, { file }, context) => {
+      console.log("Upload File");
       const { createReadStream, filename, mimetype, encoding } = await file;
-
-      // Invoking the `createReadStream` will return a Readable Stream.
-      // See https://nodejs.org/api/stream.html#stream_readable_streams
-      const stream = createReadStream();
-
-      // This is purely for demonstration purposes and will overwrite the
-      // local-file-output.txt in the current working directory on EACH upload.
-      const out = require('fs').createWriteStream('local-file-output.txt');
-      stream.pipe(out);
+      const readStream = createReadStream();
+      const out = fs.createWriteStream(
+        path.join(__dirname, "../data", filename)
+      );
+      readStream.pipe(out);
       await finished(out);
-
+      if (context.user) {
+        await User.findByIdAndUpdate(
+          context.user._id,
+          { $push: { style: filename } },
+          { new: true }
+        );
+      }
+      console.log(`Saved file ${filename} to disk`);
       return { filename, mimetype, encoding };
     },
-  }
+  },
 };
 
 module.exports = resolvers;

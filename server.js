@@ -1,21 +1,28 @@
 require('dotenv').config();
 const express = require('express');
 const logger = require('morgan');
+const path = require('path');
 const { ApolloServer } = require('apollo-server-express');
 
 const { typeDefs, resolvers } = require('./schemas');
 const { authMiddleware } = require('./utils/auth');
 const db = require('./config/connection');
+const { graphqlUploadExpress } = require('graphql-upload');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: authMiddleware
+  context: authMiddleware,
+  uploads: false
 });
 
 app.use(logger('dev'));
+
+app.use(graphqlUploadExpress());
+
+app.use(express.static(path.resolve('./data')))
 
 server.applyMiddleware({ app });
 

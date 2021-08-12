@@ -6,10 +6,6 @@ const bcrypt = require('bcrypt');
 
 
 const userSchema = new Schema({
-  isArtist: {
-    type: Boolean,
-    required: true,
-  },
   firstName: {
     type: String,
     required: true,
@@ -19,6 +15,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
     trim: true
+  },
+  artist: {
+    type: Boolean,
+    default: false
   },
   email: {
     type: String,
@@ -36,9 +36,9 @@ const userSchema = new Schema({
   social: {
     type: String,
   },
-  style: {
+  style: [{
     type: String,
-  },
+  }],
   profilePicture: {
     type: String,
   },
