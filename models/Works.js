@@ -6,15 +6,15 @@ const workSchema = new Schema({
     userId: {
       type: Number,
     },
-    tattoos: {
+    myTattoos: {
       type: String,
     },
     post: {
       type: String,
     },
-    flash: {
+    artistTattoo: {
       type: String,
-    }
+    },
   })
 
   const Works = mongoose.model('Works', workSchema);

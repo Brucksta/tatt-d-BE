@@ -13,6 +13,8 @@ const typeDefs = gql`
     firstName: String
     lastName: String
     artist: Boolean
+    tattoo: [String]
+    flash: [String]
     email: String
     bio: String
     social: String
@@ -24,7 +26,6 @@ const typeDefs = gql`
     userId: Int
     tattoos: String
     post: String
-    flash: String
   }
 
   type Auth {
@@ -42,7 +43,7 @@ const typeDefs = gql`
     addUser(firstName: String!, lastName: String!, email: String!, password: String!, artist: Boolean): Auth
     updateUser(firstName: String, lastName: String, email: String, password: String): User
     login(email: String!, password: String!): Auth
-    singleUpload(file: Upload!): File!
+    singleUpload(file: Upload!, tattooType: String!): File!
   }
 
 

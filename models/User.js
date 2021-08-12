@@ -25,6 +25,12 @@ const userSchema = new Schema({
     required: true,
     unique: true
   },
+  tattooType: {
+    type: String,
+  },
+  flash: [{
+    type: String
+  }],
   password: {
     type: String,
     required: true,
@@ -42,9 +48,9 @@ const userSchema = new Schema({
   profilePicture: {
     type: String,
   },
-  myTattoos: {
+  tattoo: [{
     type: String,
-  }
+  }]
 });
 
 

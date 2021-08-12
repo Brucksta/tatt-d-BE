@@ -57,7 +57,7 @@ const resolvers = {
 
       return { token, user };
     },
-    singleUpload: async (parent, { file }, context) => {
+    singleUpload: async (parent, { file, tattooType }, context) => {
       console.log("Upload File");
       const { createReadStream, filename, mimetype, encoding } = await file;
       const readStream = createReadStream();
@@ -69,7 +69,7 @@ const resolvers = {
       if (context.user) {
         await User.findByIdAndUpdate(
           context.user._id,
-          { $push: { style: filename } },
+          { $push: { [tattooType]: filename } },
           { new: true }
         );
       }
